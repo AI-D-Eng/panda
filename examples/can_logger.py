@@ -2,15 +2,23 @@
 
 import csv
 from panda import Panda
+import time
 
 def can_logger():
   p = Panda()
 
   try:
     outputfile = open('output.csv', 'w')
+    outputfile_cabana = open('output_cabana.csv', 'w')
     csvwriter = csv.writer(outputfile)
+    csvwriter_cabana = csv.writer(outputfile_cabana)
+
     # Write Header
     csvwriter.writerow(['Bus', 'MessageID', 'Message', 'MessageLength'])
+
+    #time,addr,bus,data
+    #time.time()
+    csvwriter_cabana.writerow(['time', 'addr', 'bus', 'data'])
     print("Writing csv file output.csv. Press Ctrl-C to exit...\n")
 
     bus0_msg_cnt = 0
@@ -22,6 +30,7 @@ def can_logger():
 
       for address, _, dat, src in can_recv:
         csvwriter.writerow([str(src), str(hex(address)), f"0x{dat.hex()}", len(dat)])
+        csvwriter_cabana.writerow([str(time.time()), str(int(address)), str(src),f"0x{dat.hex()}"])
 
         if src == 0:
           bus0_msg_cnt += 1

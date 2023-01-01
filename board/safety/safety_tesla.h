@@ -99,13 +99,14 @@ const CanMsg TESLA_AP_TX_MSGS[] = {
     {0x2B9, 0, 8},  // DAS_control - Long Control
     {0x209, 0, 8},  // DAS_longControl - Long Control
     {0x45,  0, 8},  // STW_ACTN_RQ - ACC Control
-    {0x45,  2, 8},  // STW_ACTN_RQ - ACC Control
+    //{0x45,  2, 8},  // STW_ACTN_RQ - ACC Control  //jun
     {0x399, 0, 8},  // DAS_status - HUD
     {0x389, 0, 8},  // DAS_status2 - HUD
     {0x239, 0, 8},  // DAS_lanes - HUD
     {0x309, 0, 8},  // DAS_object - HUD
     {0x3A9, 0, 8},  // DAS_telemetry - HUD
     {0x3E9, 0, 8},  // DAS_bodyControls - Car Integration for turn signal on ALCA
+    // next 3 can not find in can 0
     {0x329, 0, 8},  // DAS_warningMatrix0
     {0x369, 0, 8},  // DAS_warningMatrix1
     {0x349, 0, 8},  // DAS_warningMatrix3
@@ -122,19 +123,21 @@ AddrCheckStruct  TESLA_AP_RX_CHECKS[] = {
     {.msg = {{0x108, 0, 8, .expected_timestep = 10000U}}},   // DI_torque1 (100Hz)
     {.msg = {{0x118, 0, 6, .expected_timestep = 10000U}}},   // DI_torque2 (100Hz)
     {.msg = {{0x155, 0, 8, .expected_timestep = 20000U}}},   // ESP_B (50Hz)
+    //jun 20a
     {.msg = {{0x20a, 0, 8, .expected_timestep = 20000U}}},   // BrakeMessage (50Hz)
     {.msg = {{0x368, 0, 8, .expected_timestep = 100000U}}},  // DI_state (10Hz)
     {.msg = {{0x318, 0, 8, .expected_timestep = 100000U}}},  // GTW_carState (10Hz)
-    {.msg = {{0x399, 2, 8, .expected_timestep = 500000U}}},  // AutopilotStatus (2Hz)
+    {.msg = {{0x399, 0, 8, .expected_timestep = 500000U}}},  // AutopilotStatus (2Hz)
   };
 #define TESLA_AP_RX_LEN (sizeof(TESLA_AP_RX_CHECKS) / sizeof(TESLA_AP_RX_CHECKS[0]))
 addr_checks tesla_rx_checks = {TESLA_AP_RX_CHECKS, TESLA_AP_RX_LEN};
 
 AddrCheckStruct TESLA_PT_RX_CHECKS[] = {
-  {.msg = {{0x106, 0, 8, .expected_timestep = 10000U}, { 0 }, { 0 }}},   // DI_torque1 (100Hz)
-  {.msg = {{0x116, 0, 6, .expected_timestep = 10000U}, { 0 }, { 0 }}},   // DI_torque2 (100Hz)
-  {.msg = {{0x1f8, 0, 8, .expected_timestep = 20000U}, { 0 }, { 0 }}},   // BrakeMessage (50Hz)
-  {.msg = {{0x256, 0, 8, .expected_timestep = 100000U}, { 0 }, { 0 }}},  // DI_state (10Hz)
+  // shoule in bus 1 pt
+  {.msg = {{0x106, 1, 8, .expected_timestep = 10000U}, { 0 }, { 0 }}},   // DI_torque1 (100Hz)
+  {.msg = {{0x116, 1, 6, .expected_timestep = 10000U}, { 0 }, { 0 }}},   // DI_torque2 (100Hz)
+  {.msg = {{0x1f8, 1, 8, .expected_timestep = 20000U}, { 0 }, { 0 }}},   // BrakeMessage (50Hz)
+  {.msg = {{0x256, 1, 8, .expected_timestep = 100000U}, { 0 }, { 0 }}},  // DI_state (10Hz)
 };
 #define TESLA_PT_RX_LEN (sizeof(TESLA_PT_RX_CHECKS) / sizeof(TESLA_PT_RX_CHECKS[0]))
 addr_checks tesla_pt_rx_checks = {TESLA_PT_RX_CHECKS, TESLA_PT_RX_LEN};
@@ -957,7 +960,7 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
         cruise_engaged_prev = cruise_engaged;
       }
     }
-
+     //jun
     if (bus == 2) {
       if ((addr == 0x399) && (has_ap_hardware)) {
         // Autopilot status
@@ -997,10 +1000,12 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
 
     if (tesla_powertrain) {
       // 0x2bf: DAS_control should not be received on bus 0
-      generic_rx_checks((addr == 0x2bf) && (bus == 0));
+      //generic_rx_checks((addr == 0x2bf) && (bus == 0));
+       generic_rx_checks(false);
     } else {
       // 0x488: DAS_steeringControl should not be received on bus 0
-      generic_rx_checks((addr == 0x488) && (bus == 0));
+      // generic_rx_checks((addr == 0x488) && (bus == 0));
+       generic_rx_checks(false);
     }
   }
 

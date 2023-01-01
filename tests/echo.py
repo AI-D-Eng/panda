@@ -14,6 +14,8 @@ def heartbeat_thread(p):
   while True:
     try:
       p.send_heartbeat()
+      p.can_send(0x10,b"\x78\x65\x73\x74", 1)
+      print(p.health())
       time.sleep(0.5)
     except Exception:
       continue
@@ -24,10 +26,14 @@ if __name__ == "__main__":
   _thread.start_new_thread(heartbeat_thread, (p,))
   p.set_safety_mode(Panda.SAFETY_ALLOUTPUT)
   p.set_power_save(False)
+  p.set_can_loopback(True)
+
 
   while True:
     incoming = p.can_recv()
     for message in incoming:
       address, notused, data, bus = message
+      print(message)
       if b'test' in data:
-        p.can_send(address, data[::-1], bus)
+        p.can_send(0x11,b"\x74\x65\x73\x74", 1)
+        p.can_send(0x10,b"\x74\x65\x73\x74", 1)
