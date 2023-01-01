@@ -145,7 +145,7 @@ CanMsgFwd  TESLA_AP_FWD_MODDED[] = {
     {.msg = {0x2B9,2,8},.fwd_to_bus=0,.expected_timestep = 25000U,.counter_mask_H=0x00E00000,.counter_mask_L=0x00000000}, // DAS_control - Long Control - 40Hz
     {.msg = {0x209,2,8},.fwd_to_bus=0,.expected_timestep = 25000U,.counter_mask_H=0x00E00000,.counter_mask_L=0x00000000}, // DAS_longControl - Long Control - 40Hz
     //for DAS_bodyControls Mask all but checksum, turnSignalRequest, turnSignalReason and hazardRequest
-    {.msg = {0x3E9,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00FFFFF,.counter_mask_L=0xFFF0FCF3}, // DAS_bodyControls - Control Body - 2Hz - 
+    {.msg = {0x3E9,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00FFFFF,.counter_mask_L=0xFFF0FCF3}, // DAS_bodyControls - Control Body - 2Hz -
     //used for IC integration
     {.msg = {0x399,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F8031F,.counter_mask_L=0xFF3FFFF0}, // DAS_status - Status - 2Hz
     {.msg = {0x389,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F0FF3C,.counter_mask_L=0xFFFF3FFF}, // DAS_status2 - Status - 2Hz
@@ -173,8 +173,8 @@ const CanMsg TESLA_PREAP_TX_MSGS[] = {
     {0x329, 0, 8},  // DAS_warningMatrix0
     {0x369, 0, 8},  // DAS_warningMatrix1
     {0x349, 0, 8},  // DAS_warningMatrix3
-    {0x659, 0, 8},  // DAS_uds used for IC into TB 
-    {0x214, 0, 3},  // EPB_epasControl 
+    {0x659, 0, 8},  // DAS_uds used for IC into TB
+    {0x214, 0, 3},  // EPB_epasControl
     //used for radar integration
     {0x109, 1, 8},  //DI_torque1
     {0x119, 1, 6},  //DI_torque2
@@ -200,7 +200,7 @@ const CanMsg TESLA_PREAP_TX_MSGS[] = {
     {0x200, 0, 6}, //old code for pedal
     {0x200, 2, 6}, //old code for pedal can2
     //brake wipe request
-    {0x208, 0, 4}, //GTW_ESP1 spammed 
+    {0x208, 0, 4}, //GTW_ESP1 spammed
     //iBooster command
     {0x553, 0, 6}, //Brake command for iBooster
     //ibooster vacuum switch
@@ -228,7 +228,7 @@ CanMsgFwd TESLA_PREAP_FWD_MODDED[] = {
   {.msg = {0x3E9,0,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F00000,.counter_mask_L=0x00000000}, // DAS_bodyControls - Control Body - 2Hz
   //used for IC integration
   {.msg = {0x399,0,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F00000,.counter_mask_L=0x00000000}, // DAS_status - Status - 2Hz
-  {.msg = {0x2B9,0,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00E00000,.counter_mask_L=0x00000000}, // DAS_control - Long Control 
+  {.msg = {0x2B9,0,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00E00000,.counter_mask_L=0x00000000}, // DAS_control - Long Control
   {.msg = {0x389,0,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F00000,.counter_mask_L=0x00000000}, // DAS_status2 - Status - 2Hz
   {.msg = {0x329,0,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_warningMatrix0 - Status - 1Hz - nocounter/nochecksum
   {.msg = {0x369,0,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_warningMatrix1 - Status - 1Hz - nocounter/nochecksum
@@ -237,7 +237,7 @@ CanMsgFwd TESLA_PREAP_FWD_MODDED[] = {
   {.msg = {0x3B1,0,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_telemetryFurniture - Lane Type - 25Hz - nocounter/nochecksum
   {.msg = {0x309,0,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_object - Lead Car - 30Hz - nocounter/nochecksum
   {.msg = {0x239,0,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0xF0000000,.counter_mask_L=0x00000000}, // DAS_lanes - Path/Lanes - 10Hz - nochecksum
-}; 
+};
 
 bool autopilot_enabled = false;
 bool eac_enabled = false;
@@ -256,21 +256,21 @@ static uint8_t tesla_compute_checksum(CANPacket_t *to_push) {
 
 static uint8_t tesla_compute_crc(uint32_t MLB, uint32_t MHB , int msg_len) {
   //"""Calculate CRC8 using 1D poly, FF start, FF end"""
-  int crc_lookup[256] = { 0x00, 0x1D, 0x3A, 0x27, 0x74, 0x69, 0x4E, 0x53, 0xE8, 0xF5, 0xD2, 0xCF, 0x9C, 0x81, 0xA6, 0xBB, 
-    0xCD, 0xD0, 0xF7, 0xEA, 0xB9, 0xA4, 0x83, 0x9E, 0x25, 0x38, 0x1F, 0x02, 0x51, 0x4C, 0x6B, 0x76, 
-    0x87, 0x9A, 0xBD, 0xA0, 0xF3, 0xEE, 0xC9, 0xD4, 0x6F, 0x72, 0x55, 0x48, 0x1B, 0x06, 0x21, 0x3C, 
-    0x4A, 0x57, 0x70, 0x6D, 0x3E, 0x23, 0x04, 0x19, 0xA2, 0xBF, 0x98, 0x85, 0xD6, 0xCB, 0xEC, 0xF1, 
-    0x13, 0x0E, 0x29, 0x34, 0x67, 0x7A, 0x5D, 0x40, 0xFB, 0xE6, 0xC1, 0xDC, 0x8F, 0x92, 0xB5, 0xA8, 
-    0xDE, 0xC3, 0xE4, 0xF9, 0xAA, 0xB7, 0x90, 0x8D, 0x36, 0x2B, 0x0C, 0x11, 0x42, 0x5F, 0x78, 0x65, 
-    0x94, 0x89, 0xAE, 0xB3, 0xE0, 0xFD, 0xDA, 0xC7, 0x7C, 0x61, 0x46, 0x5B, 0x08, 0x15, 0x32, 0x2F, 
-    0x59, 0x44, 0x63, 0x7E, 0x2D, 0x30, 0x17, 0x0A, 0xB1, 0xAC, 0x8B, 0x96, 0xC5, 0xD8, 0xFF, 0xE2, 
-    0x26, 0x3B, 0x1C, 0x01, 0x52, 0x4F, 0x68, 0x75, 0xCE, 0xD3, 0xF4, 0xE9, 0xBA, 0xA7, 0x80, 0x9D, 
-    0xEB, 0xF6, 0xD1, 0xCC, 0x9F, 0x82, 0xA5, 0xB8, 0x03, 0x1E, 0x39, 0x24, 0x77, 0x6A, 0x4D, 0x50, 
-    0xA1, 0xBC, 0x9B, 0x86, 0xD5, 0xC8, 0xEF, 0xF2, 0x49, 0x54, 0x73, 0x6E, 0x3D, 0x20, 0x07, 0x1A, 
-    0x6C, 0x71, 0x56, 0x4B, 0x18, 0x05, 0x22, 0x3F, 0x84, 0x99, 0xBE, 0xA3, 0xF0, 0xED, 0xCA, 0xD7, 
-    0x35, 0x28, 0x0F, 0x12, 0x41, 0x5C, 0x7B, 0x66, 0xDD, 0xC0, 0xE7, 0xFA, 0xA9, 0xB4, 0x93, 0x8E, 
-    0xF8, 0xE5, 0xC2, 0xDF, 0x8C, 0x91, 0xB6, 0xAB, 0x10, 0x0D, 0x2A, 0x37, 0x64, 0x79, 0x5E, 0x43, 
-    0xB2, 0xAF, 0x88, 0x95, 0xC6, 0xDB, 0xFC, 0xE1, 0x5A, 0x47, 0x60, 0x7D, 0x2E, 0x33, 0x14, 0x09, 
+  int crc_lookup[256] = { 0x00, 0x1D, 0x3A, 0x27, 0x74, 0x69, 0x4E, 0x53, 0xE8, 0xF5, 0xD2, 0xCF, 0x9C, 0x81, 0xA6, 0xBB,
+    0xCD, 0xD0, 0xF7, 0xEA, 0xB9, 0xA4, 0x83, 0x9E, 0x25, 0x38, 0x1F, 0x02, 0x51, 0x4C, 0x6B, 0x76,
+    0x87, 0x9A, 0xBD, 0xA0, 0xF3, 0xEE, 0xC9, 0xD4, 0x6F, 0x72, 0x55, 0x48, 0x1B, 0x06, 0x21, 0x3C,
+    0x4A, 0x57, 0x70, 0x6D, 0x3E, 0x23, 0x04, 0x19, 0xA2, 0xBF, 0x98, 0x85, 0xD6, 0xCB, 0xEC, 0xF1,
+    0x13, 0x0E, 0x29, 0x34, 0x67, 0x7A, 0x5D, 0x40, 0xFB, 0xE6, 0xC1, 0xDC, 0x8F, 0x92, 0xB5, 0xA8,
+    0xDE, 0xC3, 0xE4, 0xF9, 0xAA, 0xB7, 0x90, 0x8D, 0x36, 0x2B, 0x0C, 0x11, 0x42, 0x5F, 0x78, 0x65,
+    0x94, 0x89, 0xAE, 0xB3, 0xE0, 0xFD, 0xDA, 0xC7, 0x7C, 0x61, 0x46, 0x5B, 0x08, 0x15, 0x32, 0x2F,
+    0x59, 0x44, 0x63, 0x7E, 0x2D, 0x30, 0x17, 0x0A, 0xB1, 0xAC, 0x8B, 0x96, 0xC5, 0xD8, 0xFF, 0xE2,
+    0x26, 0x3B, 0x1C, 0x01, 0x52, 0x4F, 0x68, 0x75, 0xCE, 0xD3, 0xF4, 0xE9, 0xBA, 0xA7, 0x80, 0x9D,
+    0xEB, 0xF6, 0xD1, 0xCC, 0x9F, 0x82, 0xA5, 0xB8, 0x03, 0x1E, 0x39, 0x24, 0x77, 0x6A, 0x4D, 0x50,
+    0xA1, 0xBC, 0x9B, 0x86, 0xD5, 0xC8, 0xEF, 0xF2, 0x49, 0x54, 0x73, 0x6E, 0x3D, 0x20, 0x07, 0x1A,
+    0x6C, 0x71, 0x56, 0x4B, 0x18, 0x05, 0x22, 0x3F, 0x84, 0x99, 0xBE, 0xA3, 0xF0, 0xED, 0xCA, 0xD7,
+    0x35, 0x28, 0x0F, 0x12, 0x41, 0x5C, 0x7B, 0x66, 0xDD, 0xC0, 0xE7, 0xFA, 0xA9, 0xB4, 0x93, 0x8E,
+    0xF8, 0xE5, 0xC2, 0xDF, 0x8C, 0x91, 0xB6, 0xAB, 0x10, 0x0D, 0x2A, 0x37, 0x64, 0x79, 0x5E, 0x43,
+    0xB2, 0xAF, 0x88, 0x95, 0xC6, 0xDB, 0xFC, 0xE1, 0x5A, 0x47, 0x60, 0x7D, 0x2E, 0x33, 0x14, 0x09,
     0x7F, 0x62, 0x45, 0x58, 0x0B, 0x16, 0x31, 0x2C, 0x97, 0x8A, 0xAD, 0xB0, 0xE3, 0xFE, 0xD9, 0xC4 };
   int crc = 0xFF;
   for (int x = 0; x < msg_len; x++) {
@@ -287,7 +287,7 @@ static uint8_t tesla_compute_crc(uint32_t MLB, uint32_t MHB , int msg_len) {
 }
 
 static bool tesla_compute_fwd_checksum(CANPacket_t *to_fwd) {
-    uint8_t checksum = tesla_compute_checksum(to_fwd); 
+    uint8_t checksum = tesla_compute_checksum(to_fwd);
     bool valid = false;
     int addr = GET_ADDR(to_fwd);
 
@@ -337,7 +337,7 @@ static bool tesla_compute_fwd_should_mod(CANPacket_t *to_fwd) {
     }
 
     if (addr == 0x2B9) {
-      valid = !(autopilot_enabled || eac_enabled || autopark_enabled);      
+      valid = !(autopilot_enabled || eac_enabled || autopark_enabled);
     }
 
     //check the ones for IC integration
@@ -383,7 +383,7 @@ static bool tesla_compute_fwd_should_mod(CANPacket_t *to_fwd) {
         valid = ((!(autopilot_enabled || eac_enabled || autopark_enabled)) && (mux == 0));
       } else {
         valid = !(autopilot_enabled || eac_enabled || autopark_enabled);
-      }      
+      }
     }
 
     // DAS_telemetryFurniture
@@ -393,7 +393,7 @@ static bool tesla_compute_fwd_should_mod(CANPacket_t *to_fwd) {
         valid = ((!(autopilot_enabled || eac_enabled || autopark_enabled)) && (mux == 0));
       } else {
         valid = !(autopilot_enabled || eac_enabled || autopark_enabled);
-      }      
+      }
     }
 
     // DAS_objects
@@ -403,7 +403,7 @@ static bool tesla_compute_fwd_should_mod(CANPacket_t *to_fwd) {
         valid = ((!(autopilot_enabled || eac_enabled || autopark_enabled)) && (mux == 0));
       } else {
         valid = !(autopilot_enabled || eac_enabled || autopark_enabled);
-      }      
+      }
     }
 
     return valid;
@@ -470,7 +470,7 @@ static void teslaPreAp_fwd_to_radar_modded(uint8_t bus_num, CANPacket_t *to_fwd)
     // change the autopilot to 1
     RDHR = RDHR & 0xCFFF0F0F; //take out values for autopilot, radarPosition and epasType
     RDHR = RDHR | 0x10000000 | (radarPosition << 4) | (radarEpasType << 12);
-    
+
     //now change address and send to radar
     to_send.addr = (0x2A9 );
     WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
@@ -542,7 +542,7 @@ static void teslaPreAp_fwd_to_radar_modded(uint8_t bus_num, CANPacket_t *to_fwd)
     return;
   }
 
-  if (addr == 0x145) 
+  if (addr == 0x145)
   {
     to_send.addr = (0x149);
     WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
@@ -628,7 +628,7 @@ static void teslaPreAp_fwd_to_radar_modded(uint8_t bus_num, CANPacket_t *to_fwd)
 
     return;
   }
-  
+
 }
 
 static void teslaPreAp_generate_message(int id) {
@@ -636,7 +636,7 @@ static void teslaPreAp_generate_message(int id) {
   if (index == -1) {
     return;
   }
-  
+
   //is the data valid to process?
   if (!TESLA_PREAP_FWD_MODDED[index].is_valid) {
     //return;
@@ -652,7 +652,7 @@ static void teslaPreAp_generate_message(int id) {
   to_send.data_len_code = len_to_dlc(TESLA_PREAP_FWD_MODDED[index].msg.len);
   uint32_t RDLR = TESLA_PREAP_FWD_MODDED[index].dataL;
   uint32_t RDHR = TESLA_PREAP_FWD_MODDED[index].dataH;
-  
+
   //these messages need counter added
   //0x3E9 0x399 0x389 0x239 0x488 0x2B9
   if (id == 0x488) {
@@ -705,8 +705,8 @@ static void do_EPB_epasControl(void) {
     return;
   }
   uint32_t MLB;
-  uint32_t MHB; 
-  MLB = 0x01 + (EPB_epasControl_idx << 8) + ((0x17 + EPB_epasControl_idx) << 16); 
+  uint32_t MHB;
+  MLB = 0x01 + (EPB_epasControl_idx << 8) + ((0x17 + EPB_epasControl_idx) << 16);
   MHB = 0x00;
   send_fake_message(3,0x214,0,MLB,MHB);
   EPB_epasControl_idx++;
@@ -715,7 +715,7 @@ static void do_EPB_epasControl(void) {
 
 static void do_fake_stalk_cancel(void) {
   uint32_t MLB;
-  uint32_t MHB; 
+  uint32_t MHB;
   if ((DAS_lastStalkL == 0x00) && (DAS_lastStalkH == 0x00)) {
     return;
   }
@@ -740,7 +740,7 @@ static void teslaPreAp_send_IC_messages(void) {
   teslaPreAp_generate_message(0x309);
   //DAS_lane
   teslaPreAp_generate_message(0x239);
-  //EPB_epasControl 
+  //EPB_epasControl
   do_EPB_epasControl();
   //DAS_steeringControl
   teslaPreAp_generate_message(0x488);
@@ -773,7 +773,7 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
   {
     //we're still in tesla safety mode, reset the timeout counter and make sure our output is enabled
     set_gmlan_digital_output(0); //GMLAN_HIGH
-    reset_gmlan_switch_timeout(); 
+    reset_gmlan_switch_timeout();
   };
 
   bool valid = false;
@@ -799,7 +799,7 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
   }
 
   //looking for radar messages to see if we have a timeout
-  if ((addr == 0x300) && (bus == tesla_radar_can)) 
+  if ((addr == 0x300) && (bus == tesla_radar_can))
   {
     uint32_t ts = microsecond_timer_get();
     uint32_t ts_elapsed = get_ts_elapsed(ts, tesla_last_radar_signal);
@@ -809,7 +809,7 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
     } else
     if ((ts_elapsed > TESLA_RADAR_TIMEOUT) && (tesla_radar_status > 0)) {
       tesla_radar_status = 0;
-    } else 
+    } else
     if ((ts_elapsed <= TESLA_RADAR_TIMEOUT) && (tesla_radar_status == 2)) {
       tesla_last_radar_signal = ts;
     }
@@ -826,7 +826,7 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
     } else
     if ((ts_elapsed > TESLA_RADAR_TIMEOUT) && (tesla_radar_status > 0)) {
       tesla_radar_status = 0;
-    } else 
+    } else
     if ((ts_elapsed <= TESLA_RADAR_TIMEOUT) && (tesla_radar_status > 0)) {
       tesla_last_radar_signal = ts;
     }
@@ -843,7 +843,7 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
           uint32_t ts_elapsed = get_ts_elapsed(ts, tesla_last_radar_signal);
           if ((ts_elapsed > TESLA_RADAR_TIMEOUT) && (tesla_radar_status > 0)) {
             tesla_radar_status = 0;
-          } 
+          }
         }
 
         if (addr == 0x318) {
@@ -880,7 +880,7 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
             }
           }
         }
-  
+
         if (addr == 0x214) {
           //has ibooser or otherwise we don't get EPB_epasControl
           if (has_ap_hardware) {
@@ -942,14 +942,14 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
           if(cruise_engaged && !cruise_engaged_prev && !(autopilot_enabled || eac_enabled || autopark_enabled) && !epas_inhibited) {
             time_cruise_engaged = microsecond_timer_get();
           }
-          
+
           if((time_cruise_engaged !=0) && (get_ts_elapsed(microsecond_timer_get(),time_cruise_engaged) >= TIME_TO_ENGAGE)) {
             if (cruise_engaged && !(autopilot_enabled || eac_enabled || autopark_enabled) && !epas_inhibited) {
               controls_allowed = 1;
             }
             time_cruise_engaged = 0;
           }
-          
+
           if(!cruise_engaged || epas_inhibited) {
             controls_allowed = 0;
           }
@@ -1013,7 +1013,7 @@ static int tesla_tx_hook(CANPacket_t *to_send) {
   bool violation = false;
 
   if (has_ap_hardware) {
-    if(!msg_allowed(to_send, 
+    if(!msg_allowed(to_send,
                   tesla_powertrain ? TESLA_PT_TX_MSGS : TESLA_AP_TX_MSGS,
                   tesla_powertrain ? TESLA_PT_TX_LEN : TESLA_AP_TX_LEN)) {
       tx = 0;
@@ -1066,7 +1066,7 @@ static int tesla_tx_hook(CANPacket_t *to_send) {
     int steer_control_type = GET_BYTE(to_send, 2) >> 6;
     bool steer_control_enabled = (steer_control_type != 0) &&  // NONE
                                  (steer_control_type != 3);    // DISABLED
-    
+
     // Rate limit while steering
     if(controls_allowed && steer_control_enabled) {
       // Add 1 to not false trigger the violation
@@ -1083,7 +1083,7 @@ static int tesla_tx_hook(CANPacket_t *to_send) {
         violation |= max_limit_check(desired_angle, highest_desired_angle, lowest_desired_angle);
       }
     }
-    
+
     desired_angle_last = desired_angle;
 
     // Angle should be the same as current angle while not steering
@@ -1235,7 +1235,7 @@ static int tesla_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
     //check all messages we need to also send to radar, moddified, after we receive 0x631 from radar
     //148 does not exist, we use 115 at the same frequency to trigger and pass static vals
     //175 does not exist, we use 118 at the same frequency to trigger and pass vehicle speed
-    if (((tesla_radar_status >= 0 ) || (bosch_radar_vin_learn)) && ((addr == 0x20A ) || (addr == 0x118 ) || (addr == 0x108 ) ||  
+    if (((tesla_radar_status >= 0 ) || (bosch_radar_vin_learn)) && ((addr == 0x20A ) || (addr == 0x118 ) || (addr == 0x108 ) ||
     (addr == 0x115 ) ||  (addr == 0x145)))
     {
       teslaPreAp_fwd_to_radar_modded(tesla_radar_can, to_fwd);
@@ -1254,7 +1254,7 @@ static int tesla_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
     if (has_ap_hardware) {
       // Chassis to autopilot
 
-      //we need to modify EPAS_sysStatus->EPAS_eacStatus from 2 to 1 otherwise we can never 
+      //we need to modify EPAS_sysStatus->EPAS_eacStatus from 2 to 1 otherwise we can never
       //engage AutoPilot. Once we send the steering commands from OP the status
       //changes from 1-AVAILABLE to 2-ACTIVE and AutoPilot becomes unavailable
       //The condition has to be:
@@ -1283,28 +1283,28 @@ static int tesla_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       //we take care of what needs to be modded via fwd_modded method
       //so make sure anything else is sent from 2 to 0
 
-      //if disengage less than 3 seconds ago, 
+      //if disengage less than 3 seconds ago,
       if ((controls_allowed == 0) && (get_ts_elapsed(microsecond_timer_get(),time_op_disengaged) <= TIME_TO_HIDE_ERRORS)) {
         //make DAS_status2->DAS_activationFailureStatus 0
         if (addr ==0x389) {
-          WORD_TO_BYTE_ARRAY(&to_fwd->data[0],(GET_BYTES_04(to_fwd) & 0xFFFF3FFF)); 
+          WORD_TO_BYTE_ARRAY(&to_fwd->data[0],(GET_BYTES_04(to_fwd) & 0xFFFF3FFF));
           WORD_TO_BYTE_ARRAY(&to_fwd->data[4],(GET_BYTES_48(to_fwd)  & 0x00FFFFFF));
           WORD_TO_BYTE_ARRAY(&to_fwd->data[4],(GET_BYTES_48(to_fwd)| (tesla_compute_checksum(to_fwd) << 24)));
-        } 
-        
+        }
+
 
         //make DAS_status->DAS_autopilotState 2 so we don't trigger warnings
         if (addr == 0x399) {
-          WORD_TO_BYTE_ARRAY(&to_fwd->data[0],(GET_BYTES_04(to_fwd)  & 0xFFFFFFF0) | 2); 
+          WORD_TO_BYTE_ARRAY(&to_fwd->data[0],(GET_BYTES_04(to_fwd)  & 0xFFFFFFF0) | 2);
           WORD_TO_BYTE_ARRAY(&to_fwd->data[4],(GET_BYTES_48(to_fwd) & 0x00FFFFFF));
           WORD_TO_BYTE_ARRAY(&to_fwd->data[4],(GET_BYTES_48(to_fwd) | (tesla_compute_checksum(to_fwd) << 24)));
-        } 
+        }
 
         //if disengage less than 3 seconds ago, hide warningMatrix values
         if ((addr == 0x329) || (addr == 0x349) || (addr == 0x369))  {
           WORD_TO_BYTE_ARRAY(&to_fwd->data[4],0x00);
           WORD_TO_BYTE_ARRAY(&to_fwd->data[4],0x00);
-        } 
+        }
       }
     } else {
       return -1;
@@ -1344,7 +1344,7 @@ static const addr_checks* tesla_init(int16_t param) {
     gmlan_switch_init(1);
   };
   relay_malfunction_reset();
-  
+
 
   if (tesla_powertrain) {
       return &tesla_pt_rx_checks;
