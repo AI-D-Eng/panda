@@ -144,21 +144,21 @@ addr_checks tesla_pt_rx_checks = {TESLA_PT_RX_CHECKS, TESLA_PT_RX_LEN};
 
 CanMsgFwd  TESLA_AP_FWD_MODDED[] = {
     //used for control
-    {.msg = {0x488,2,4},.fwd_to_bus=0,.expected_timestep = 50000U,.counter_mask_H=0x00000000,.counter_mask_L=0x000F0000}, // DAS_steeringControl - Lat Control - 20Hz
-    {.msg = {0x2B9,2,8},.fwd_to_bus=0,.expected_timestep = 25000U,.counter_mask_H=0x00E00000,.counter_mask_L=0x00000000}, // DAS_control - Long Control - 40Hz
-    {.msg = {0x209,2,8},.fwd_to_bus=0,.expected_timestep = 25000U,.counter_mask_H=0x00E00000,.counter_mask_L=0x00000000}, // DAS_longControl - Long Control - 40Hz
+    //{.msg = {0x488,2,4},.fwd_to_bus=0,.expected_timestep = 50000U,.counter_mask_H=0x00000000,.counter_mask_L=0x000F0000}, // DAS_steeringControl - Lat Control - 20Hz
+    //{.msg = {0x2B9,2,8},.fwd_to_bus=0,.expected_timestep = 25000U,.counter_mask_H=0x00E00000,.counter_mask_L=0x00000000}, // DAS_control - Long Control - 40Hz
+    //{.msg = {0x209,2,8},.fwd_to_bus=0,.expected_timestep = 25000U,.counter_mask_H=0x00E00000,.counter_mask_L=0x00000000}, // DAS_longControl - Long Control - 40Hz
     //for DAS_bodyControls Mask all but checksum, turnSignalRequest, turnSignalReason and hazardRequest
     {.msg = {0x3E9,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00FFFFF,.counter_mask_L=0xFFF0FCF3}, // DAS_bodyControls - Control Body - 2Hz -
     //used for IC integration
-    {.msg = {0x399,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F8031F,.counter_mask_L=0xFF3FFFF0}, // DAS_status - Status - 2Hz
-    {.msg = {0x389,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F0FF3C,.counter_mask_L=0xFFFF3FFF}, // DAS_status2 - Status - 2Hz
-    {.msg = {0x329,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_warningMatrix0 - Status - 1Hz - nocounter/nochecksum
-    {.msg = {0x369,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_warningMatrix1 - Status - 1Hz - nocounter/nochecksum
-    {.msg = {0x349,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_warningMatrix3 - Status - 1Hz - nocounter/nochecksum
-    {.msg = {0x3A9,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_telemetry - Lane Type - 10Hz - nocounter/nochecksum
-    {.msg = {0x3B1,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_telemetryFurniture - Lane Type - 25Hz - nocounter/nochecksum
-    {.msg = {0x309,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_object - Lead Car - 30Hz - nocounter/nochecksum
-    {.msg = {0x239,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0xF0000000,.counter_mask_L=0x00000000}, // DAS_lanes - Path/Lanes - 10Hz - nochecksum
+    //{.msg = {0x399,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F8031F,.counter_mask_L=0xFF3FFFF0}, // DAS_status - Status - 2Hz
+    //{.msg = {0x389,2,8},.fwd_to_bus=0,.expected_timestep = 500000U,.counter_mask_H=0x00F0FF3C,.counter_mask_L=0xFFFF3FFF}, // DAS_status2 - Status - 2Hz
+    //{.msg = {0x329,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_warningMatrix0 - Status - 1Hz - nocounter/nochecksum
+    //{.msg = {0x369,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_warningMatrix1 - Status - 1Hz - nocounter/nochecksum
+    //{.msg = {0x349,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_warningMatrix3 - Status - 1Hz - nocounter/nochecksum
+    //{.msg = {0x3A9,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_telemetry - Lane Type - 10Hz - nocounter/nochecksum
+    //{.msg = {0x3B1,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_telemetryFurniture - Lane Type - 25Hz - nocounter/nochecksum
+    //{.msg = {0x309,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0x00000000,.counter_mask_L=0x00000000}, // DAS_object - Lead Car - 30Hz - nocounter/nochecksum
+    //{.msg = {0x239,2,8},.fwd_to_bus=0,.expected_timestep = 1000000U,.counter_mask_H=0xF0000000,.counter_mask_L=0x00000000}, // DAS_lanes - Path/Lanes - 10Hz - nochecksum
   };
 
 //TESLA WITHOUT AUTOPILOT DEFS
@@ -1280,7 +1280,7 @@ static int tesla_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       //no AP hardware so nothing to forward
       return -1;
     }
-    bus_fwd = 2;
+    bus_fwd = 0;
   }
 
   if(bus_num == 2) {
